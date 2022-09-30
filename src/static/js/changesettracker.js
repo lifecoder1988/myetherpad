@@ -137,7 +137,7 @@ const makeChangesetTracker = (scheduler, apool, aceCallbacksProvider) => {
         toSubmit = Changeset.compose(submittedChangeset, userChangeset, apool);
       } else {
         // Get my authorID
-        const authorId = parent.parent.pad.myUserInfo.userId;
+        const authorId = window.pad.myUserInfo.userId;
 
         // Sanitize authorship
         // We need to replace all author attribs with thisSession.author,

@@ -140,7 +140,7 @@
 /* ======================== */
 /* == Super Light Editor == */
 /* ======================== */
-.super-light-editor #outerdocbody iframe, .super-light-editor #outerdocbody > #innerdocbody {
+.super-light-editor #outerdocbody [cname=iframe], .super-light-editor #outerdocbody > #innerdocbody {
   --bg-color: var(--super-light-color);
 }
 .super-light-editor #innerdocbody {
@@ -149,7 +149,7 @@
 /* ================== */
 /* == Light Editor == */
 /* ================== */
-.light-editor #outerdocbody iframe, .light-editor #outerdocbody > #innerdocbody {
+.light-editor #outerdocbody [cname=iframe], .light-editor #outerdocbody > #innerdocbody {
   --bg-color: var(--light-color);
 }
 .light-editor #innerdocbody {
@@ -158,7 +158,7 @@
 /* ======================= */
 /* == Super Dark Editor == */
 /* ======================= */
-.super-dark-editor #outerdocbody iframe, .super-dark-editor #outerdocbody > #innerdocbody {
+.super-dark-editor #outerdocbody [cname=iframe], .super-dark-editor #outerdocbody > #innerdocbody {
   --bg-color: var(--super-dark-color);
 }
 .super-dark-editor #innerdocbody {
@@ -167,7 +167,7 @@
 /* ================= */
 /* == Dark Editor == */
 /* ================= */
-.dark-editor #outerdocbody iframe, .dark-editor #outerdocbody > #innerdocbody {
+.dark-editor #outerdocbody [cname=iframe], .dark-editor #outerdocbody > #innerdocbody {
   --bg-color: var(--dark-color);
 }
 .dark-editor #innerdocbody {
@@ -208,7 +208,7 @@
 /* ======================= */
 /* == Full Width Editor == */
 /* ======================= */
-.full-width-editor #outerdocbody iframe, .full-width-editor #outerdocbody > #innerdocbody {
+.full-width-editor #outerdocbody [cname=iframe], .full-width-editor #outerdocbody > #innerdocbody {
   max-width: none !important;
   border-radius: 0;
 }

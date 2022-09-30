@@ -30,7 +30,7 @@
  * -----------------------------------------------------------------
  */
 
-:root {
+.outer-editor,.inner-editor {
   --super-dark-color: #485365; /*#374256;*/
   --dark-color: #576273; /*#4d5d77*/
 
@@ -56,7 +56,7 @@
 }
 
 @media (max-width:1000px) {
-  :root {
+  .outer-editor,.inner-editor {
     --editor-horizontal-padding: 0px;
     --editor-vertical-padding: 0px;
   }

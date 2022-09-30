@@ -131,6 +131,8 @@ exports.padeditbar = new class {
   }
 
   init() {
+    console.log("padeditbar init");
+
     $('#editbar .editbarbutton').attr('unselectable', 'on'); // for IE
     this.enable();
     $('#editbar [data-key]').each((i, elt) => {
@@ -168,7 +170,7 @@ exports.padeditbar = new class {
     }
 
     // When editor is scrolled, we add a class to style the editbar differently
-    $('iframe[name="ace_outer"]').contents().scroll((ev) => {
+    $('div[name="ace_outer"]').contents().scroll((ev) => {
       $('#editbar').toggleClass('editor-scrolled', $(ev.currentTarget).scrollTop() > 2);
     });
   }
@@ -318,7 +320,7 @@ exports.padeditbar = new class {
         }
       } else {
         // Focus on the editbar :)
-        const firstEditbarElement = parent.parent.$('#editbar button').first();
+        const firstEditbarElement = window.$('#editbar button').first();
 
         $(evt.currentTarget).blur();
         firstEditbarElement.focus();

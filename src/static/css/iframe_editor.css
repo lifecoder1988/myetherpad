@@ -4,7 +4,11 @@
 
 @import url('./lists_and_indents.css');
 
-html.outer-editor, html.inner-editor {
+[cname=body]:focus-visible {
+  outline: none;
+}
+
+div.outer-editor, div.inner-editor {
   background-color: transparent !important;
 }
 #outerdocbody {
@@ -13,7 +17,7 @@ html.outer-editor, html.inner-editor {
   justify-content: center;
   min-height: 100vh; /* take at least full height */
 }
-#outerdocbody iframe {
+#outerdocbody [cname=iframe] {
   flex: 1 auto;
   display: flex;
   width: 100%;

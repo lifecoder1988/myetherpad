@@ -42,7 +42,7 @@ const padeditor = (() => {
       await self.ace.init('editorcontainer', '');
       $('#editorloadingbox').hide();
       // Listen for clicks on sidediv items
-      const $outerdoc = $('iframe[name="ace_outer"]').contents().find('#outerdocbody');
+      const $outerdoc = $('div[name="ace_outer"]').contents().find('#outerdocbody');
       $outerdoc.find('#sidedivinner').on('click', 'div', function () {
         const targetLineNumber = $(this).index() + 1;
         window.location.hash = `L${targetLineNumber}`;
@@ -126,7 +126,7 @@ const padeditor = (() => {
       v = getOption('showAuthorColors', true);
       self.ace.setProperty('showsauthorcolors', v);
       $('#chattext').toggleClass('authorColors', v);
-      $('iframe[name="ace_outer"]').contents().find('#sidedivinner').toggleClass('authorColors', v);
+      $('div[name="ace_outer"]').contents().find('#sidedivinner').toggleClass('authorColors', v);
       padutils.setCheckbox($('#options-colorscheck'), v);
 
       // Override from parameters if true
@@ -167,10 +167,10 @@ exports.focusOnLine = (ace) => {
   const lineNumber = window.location.hash.substr(1);
   if (lineNumber) {
     if (lineNumber[0] === 'L') {
-      const $outerdoc = $('iframe[name="ace_outer"]').contents().find('#outerdocbody');
+      const $outerdoc = $('div[name="ace_outer"]').contents().find('#outerdocbody');
       const lineNumberInt = parseInt(lineNumber.substr(1));
       if (lineNumberInt) {
-        const $inner = $('iframe[name="ace_outer"]').contents().find('iframe')
+        const $inner = $('div[name="ace_outer"]').contents().find('[cname=iframe]')
             .contents().find('#innerdocbody');
         const line = $inner.find(`div:nth-child(${lineNumberInt})`);
         if (line.length !== 0) {
@@ -180,7 +180,7 @@ exports.focusOnLine = (ace) => {
           if (!hasMobileLayout) {
             offsetTop += parseInt($inner.css('padding-top').replace('px', ''));
           }
-          const $outerdocHTML = $('iframe[name="ace_outer"]').contents()
+          const $outerdocHTML = $('div[name="ace_outer"]').contents()
               .find('#outerdocbody').parent();
           $outerdoc.css({top: `${offsetTop}px`}); // Chrome
           $outerdocHTML.animate({scrollTop: offsetTop}); // needed for FF

@@ -8,15 +8,23 @@
   browser line.
 */
 const caretPosition = require('./caretPosition');
-
+const {getIFrameByName} = require('./ace2_common');
 function Scroll(outerWin) {
   // scroll settings
-  this.scrollSettings = parent.parent.clientVars.scrollWhenFocusLineIsOutOfViewport;
+  this.scrollSettings = window.clientVars.scrollWhenFocusLineIsOutOfViewport;
 
   // DOM reference
   this.outerWin = outerWin;
   this.doc = this.outerWin.document;
-  this.rootDocument = parent.parent.document;
+  this.rootDocument = window.document;
+
+  const innerFrame = getIFrameByName("ace_inner");
+  this.innerWindow = innerFrame.contentWindow;
+  //const innerDocument = innerWindow.document;
+
+  const outterFrame = getIFrameByName("ace_outer");
+  this.outterWindow = outterFrame.contentWindow;
+
 }
 
 Scroll.prototype.scrollWhenCaretIsInTheLastLineOfViewportWhenNecessary =
@@ -118,7 +126,7 @@ Scroll.prototype._getViewPortTopBottom = function () {
 };
 
 Scroll.prototype._getEditorPositionTop = function () {
-  const editor = parent.document.getElementsByTagName('iframe');
+  const editor = document.getElementsByName("ace_outer")
   const editorPositionTop = editor[0].offsetTop;
   return editorPositionTop;
 };
@@ -292,7 +300,7 @@ Scroll.prototype.scrollNodeVerticallyIntoView = function (rep, innerHeight) {
     } else if (caretIsBelowOfViewport) {
       // setTimeout is required here as line might not be fully rendered onto the pad
       setTimeout(() => {
-        const outer = window.parent;
+        const outer = this.outterWindow;
         // scroll to the very end of the pad outer
         outer.scrollTo(0, outer[0].innerHeight);
       }, 150);

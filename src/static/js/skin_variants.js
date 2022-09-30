@@ -11,8 +11,8 @@ if (window.location.hash.toLowerCase() === '#skinvariantsbuilder') {
   const updateSkinVariantsClasses = () => {
     const domsToUpdate = [
       $('html'),
-      $('iframe[name=ace_outer]').contents().find('html'),
-      $('iframe[name=ace_outer]').contents().find('iframe[name=ace_inner]').contents().find('html'),
+      $('div[name=ace_outer]').contents().find('html'),
+      $('div[name=ace_outer]').contents().find('div[name=ace_inner]').contents().find('[cname=html]'),
     ];
     colors.forEach((color) => {
       containers.forEach((container) => {

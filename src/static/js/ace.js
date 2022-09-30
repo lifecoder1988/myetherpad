@@ -170,12 +170,12 @@ const Ace2Editor = function () {
     this.importText(initialCode);
 
     const includedCSS = [
-      `../static/css/iframe_editor.css?v=${clientVars.randomVersionString}`,
-      `../static/css/pad.css?v=${clientVars.randomVersionString}`,
+       `../static/css/iframe_editor.css?v=${clientVars.randomVersionString}`,
+      // `../static/css/pad.css?v=${clientVars.randomVersionString}`,
       ...hooks.callAll('aceEditorCSS').map(
           // Allow urls to external CSS - http(s):// and //some/path.css
           (p) => /\/\//.test(p) ? p : `../static/plugins/${p}`),
-      `../static/skins/${clientVars.skinName}/pad.css?v=${clientVars.randomVersionString}`,
+     // `../static/skins/${clientVars.skinName}/pad.css?v=${clientVars.randomVersionString}`,
     ];
 
     const skinVariants = clientVars.skinVariants.split(' ').filter((x) => x !== '');
@@ -257,13 +257,13 @@ const Ace2Editor = function () {
 
     // <head> tag
     addStyleTagsFor(innerDocument, includedCSS);
-    const requireKernel = innerDocument.createElement('script');
+    /* const requireKernel = innerDocument.createElement('script');
     requireKernel.type = 'text/javascript';
     requireKernel.src =
         absUrl(`../static/js/require-kernel.js?v=${clientVars.randomVersionString}`);
-    innerDocument.head.appendChild(requireKernel);
+    innerDocument.head.appendChild(requireKernel); */
     // Pre-fetch modules to improve load performance.
-    for (const module of ['ace2_inner', 'ace2_common']) {
+    for (const module of ['ace2_inner']) {
       const script = innerDocument.createElement('script');
       script.type = 'text/javascript';
       script.src = absUrl(`../javascripts/lib/ep_etherpad-lite/static/js/${module}.js` +
@@ -286,7 +286,7 @@ const Ace2Editor = function () {
     innerDocument.body.appendChild(innerDocument.createTextNode('\u00A0')); // &nbsp;
 
     debugLog('Ace2Editor.init() waiting for require kernel load');
-    await eventFired(requireKernel, 'load');
+    // await eventFired(requireKernel, 'load');
     debugLog('Ace2Editor.init() require kernel loaded');
     const require = innerWindow.require;
     require.setRootURI(absUrl('../javascripts/src'));
@@ -304,14 +304,14 @@ const Ace2Editor = function () {
     await new Promise((resolve, reject) => innerWindow.plugins.ensure(
         (err) => err != null ? reject(err) : resolve()));
     debugLog('Ace2Editor.init() waiting for Ace2Inner.init()');
-    /* await innerWindow.Ace2Inner.init(info, {
+    await innerWindow.Ace2Inner.init(info, {
       inner: makeCSSManager(innerStyle.sheet),
       outer: makeCSSManager(outerStyle.sheet),
       parent: makeCSSManager(document.querySelector('style[title="dynamicsyntax"]').sheet),
     });
     debugLog('Ace2Editor.init() Ace2Inner.init() returned');
     loaded = true;
-    doActionsPendingInit(); */
+    doActionsPendingInit();
     debugLog('Ace2Editor.init() done');
   };
 };

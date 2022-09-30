@@ -68,6 +68,7 @@ const ProxyDocument = (node) => {
         return node.firstChild;
       }
       if(document[key] && document[key] instanceof Function) {
+        console.log("call document " +  key)
         return Reflect.get(document,key).bind(document);
       }
       return Reflect.get(document,key);
@@ -86,6 +87,7 @@ const ProxyIFrameWindow = (win, node) => {
 
       if(obj[key]) {
         if(obj[key] instanceof Function) {
+          console.log("call obj " +  key)
           return Reflect.get(obj,key).bind(obj)
         }
         return obj[key]
@@ -93,16 +95,19 @@ const ProxyIFrameWindow = (win, node) => {
 
       if(node[key]) {
         if(node[key] instanceof Function) {
+          console.log("call iframenode " +  key)
           return Reflect.get(node,key).bind(node)
         }
         return node[key]
       }
       if (win[key] && win[key] instanceof Function) {
+        console.log("call window " +  key)
         return Reflect.get(win,key).bind(win);
       }
       return Reflect.get(win,key);
     },
     set(obj,key,value) {
+      console.log("set " + key + " = value " + value);
       obj[key] = value;
       return true;
     }
@@ -115,10 +120,8 @@ const createIFrame = () => {
     get() { return iframeNode.getAttribute('name'); },
     set(newValue) { iframeNode.setAttribute('name', newValue); },
     enumerable: true,
-    configurable: true
+    configurable: true,
   });
-
-
 
   iframeNode.setAttribute("cname","iframe");
   const htmlNode = document.createElement("div");
@@ -136,9 +139,37 @@ const createIFrame = () => {
   return iframeNode;
 }
 
+const getIFrameByName = (name) => {
+  const iframeNode = document.getElementsByName(name)[0];
+
+  Object.defineProperty(iframeNode, 'name', {
+    get() { return iframeNode.getAttribute('name'); },
+    set(newValue) { iframeNode.setAttribute('name', newValue); },
+    enumerable: true,
+    configurable: true,
+  });
+
+
+  const htmlNode = iframeNode.firstChild;
+
+
+  const bodyNode = htmlNode.firstChild;
+
+
+  iframeNode.documentElement = htmlNode;
+  htmlNode.body = bodyNode;
+  iframeNode.contentWindow = ProxyIFrameWindow(window, iframeNode);
+
+
+  return iframeNode;
+}
+
+
 const noop = () => {};
 
 exports.createIFrame = createIFrame;
+
+exports.getIFrameByName = getIFrameByName;
 exports.isNodeText = isNodeText;
 exports.getAssoc = getAssoc;
 exports.setAssoc = setAssoc;

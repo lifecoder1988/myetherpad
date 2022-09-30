@@ -35,7 +35,7 @@ body {
 #editorcontainerbox #editorcontainer:not(.initialized) {
   visibility: hidden;
 }
-#editorcontainerbox #editorcontainer iframe {
+#editorcontainerbox #editorcontainer [cname=iframe] {
   width: 100%;
   height: auto;
 }
