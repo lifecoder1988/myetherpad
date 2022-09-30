@@ -27,7 +27,7 @@
 const hooks = require('./pluginfw/hooks');
 const makeCSSManager = require('./cssmanager').makeCSSManager;
 const pluginUtils = require('./pluginfw/shared');
-
+const {createIFrame} = require('./ace2_common');
 const debugLog = (...args) => {};
 
 // The inner and outer iframe's locations are about:blank, so relative URLs are relative to that.
@@ -180,7 +180,7 @@ const Ace2Editor = function () {
 
     const skinVariants = clientVars.skinVariants.split(' ').filter((x) => x !== '');
 
-    const outerFrame = document.createElement('iframe');
+    const outerFrame = createIFrame();
     outerFrame.name = 'ace_outer';
     outerFrame.frameBorder = 0; // for IE
     outerFrame.title = 'Ether';
@@ -199,7 +199,7 @@ const Ace2Editor = function () {
     const outerWindow = outerFrame.contentWindow;
 
     debugLog('Ace2Editor.init() waiting for outer frame');
-    await frameReady(outerFrame);
+    // await frameReady(outerFrame);
     debugLog('Ace2Editor.init() outer frame ready');
 
     // Firefox might replace the outerWindow.document object after iframe creation so this variable
@@ -232,7 +232,7 @@ const Ace2Editor = function () {
     lineMetricsDiv.appendChild(outerDocument.createTextNode('x'));
     outerDocument.body.appendChild(lineMetricsDiv);
 
-    const innerFrame = outerDocument.createElement('iframe');
+    const innerFrame = createIFrame();
     innerFrame.name = 'ace_inner';
     innerFrame.title = 'pad';
     innerFrame.scrolling = 'no';
@@ -245,7 +245,7 @@ const Ace2Editor = function () {
     const innerWindow = innerFrame.contentWindow;
 
     debugLog('Ace2Editor.init() waiting for inner frame');
-    await frameReady(innerFrame);
+    // await frameReady(innerFrame);
     debugLog('Ace2Editor.init() inner frame ready');
 
     // Firefox might replace the innerWindow.document object after iframe creation so this variable
@@ -296,7 +296,7 @@ const Ace2Editor = function () {
     // intentially moved before requiring client_plugins to save a 307
     innerWindow.Ace2Inner = require('ep_etherpad-lite/static/js/ace2_inner');
     innerWindow.plugins = require('ep_etherpad-lite/static/js/pluginfw/client_plugins');
-    innerWindow.plugins.adoptPluginsFromAncestorsOf(innerWindow);
+    //innerWindow.plugins.adoptPluginsFromAncestorsOf(innerWindow);
 
     innerWindow.$ = innerWindow.jQuery = require('ep_etherpad-lite/static/js/rjquery').jQuery;
 
@@ -304,14 +304,14 @@ const Ace2Editor = function () {
     await new Promise((resolve, reject) => innerWindow.plugins.ensure(
         (err) => err != null ? reject(err) : resolve()));
     debugLog('Ace2Editor.init() waiting for Ace2Inner.init()');
-    await innerWindow.Ace2Inner.init(info, {
+    /* await innerWindow.Ace2Inner.init(info, {
       inner: makeCSSManager(innerStyle.sheet),
       outer: makeCSSManager(outerStyle.sheet),
       parent: makeCSSManager(document.querySelector('style[title="dynamicsyntax"]').sheet),
     });
     debugLog('Ace2Editor.init() Ace2Inner.init() returned');
     loaded = true;
-    doActionsPendingInit();
+    doActionsPendingInit(); */
     debugLog('Ace2Editor.init() done');
   };
 };
