@@ -141,7 +141,7 @@ function Ace2Inner(editorInfo, cssManagers) {
   let doesWrap = true;
   let hasLineNumbers = true;
   let isStyled = true;
-
+  window.rep = rep;
   let console = (DEBUG && window.console);
 
   if (!window.console) {
@@ -168,7 +168,7 @@ function Ace2Inner(editorInfo, cssManagers) {
   }
 
   const scheduler = parent; // hack for opera required
-
+  window.console.log('1111111111');
   const performDocumentReplaceRange = (start, end, newText) => {
     if (start === undefined) start = rep.selStart;
     if (end === undefined) end = rep.selEnd;
@@ -406,6 +406,9 @@ function Ace2Inner(editorInfo, cssManagers) {
   editorInfo.ace_inCallStack = inCallStack;
 
   const inCallStackIfNecessary = (type, action) => {
+    if (type !== 'idleWorkTimer') {
+      window.console.log('inCallStackIfNecessary');
+    }
     if (!currentCallStack) {
       inCallStack(type, action);
     } else {
@@ -794,7 +797,7 @@ function Ace2Inner(editorInfo, cssManagers) {
         incorporateUserChanges();
 
         if (isTimeUp()) return;
-
+        window.console.log('idleWorkTimer updateLineNumbers');
         updateLineNumbers(); // update line numbers if any time left
         if (isTimeUp()) return;
         finishedImportantWork = true;
@@ -999,6 +1002,7 @@ function Ace2Inner(editorInfo, cssManagers) {
   };
 
   const incorporateUserChanges = () => {
+    window.console.log('incorporateUserChanges');
     if (currentCallStack.domClean) return false;
 
     currentCallStack.isUserChange = true;
@@ -1066,11 +1070,13 @@ function Ace2Inner(editorInfo, cssManagers) {
         for (let n = firstDirtyNode; n &&
             !(n.previousSibling && n.previousSibling === lastDirtyNode);
           n = n.nextSibling) {
+          window.console.log('cc.collectContent -1 ');
           cc.collectContent(n);
           dirtyNodes.push(n);
         }
         cc.notifyNextNode(lastDirtyNode.nextSibling);
         let lines = cc.getLines();
+        window.console.log(lines);
         if ((lines.length <= 1 || lines[lines.length - 1] !== '') && lastDirtyNode.nextSibling) {
           // dirty region doesn't currently end a line, even taking the following node
           // (or lack of node) into account, so include the following clean node.
@@ -1079,6 +1085,7 @@ function Ace2Inner(editorInfo, cssManagers) {
           // Note that this clean node might need to be there for the next dirty range.
           b++;
           const cleanLine = lastDirtyNode.nextSibling;
+          window.console.log('cc.collectContent -2 ');
           cc.collectContent(cleanLine);
           toDeleteAtEnd.push(cleanLine);
           cc.notifyNextNode(cleanLine.nextSibling);
@@ -1383,6 +1390,9 @@ function Ace2Inner(editorInfo, cssManagers) {
   };
 
   const performDocumentApplyChangeset = (changes, insertsAfterSelection) => {
+
+    window.console.log('performDocumentApplyChangeset');
+
     const domAndRepSplice = (startLine, deleteCount, newLineStrings) => {
       const keysToDelete = [];
       if (deleteCount > 0) {
@@ -2379,6 +2389,7 @@ function Ace2Inner(editorInfo, cssManagers) {
   };
 
   const doReturnKey = () => {
+    window.console.log('doReturnKey');
     if (!(rep.selStart && rep.selEnd)) {
       return;
     }
@@ -2541,6 +2552,7 @@ function Ace2Inner(editorInfo, cssManagers) {
   editorInfo.ace_isWordChar = isWordChar;
 
   const handleKeyEvent = (evt) => {
+    window.console.log('handleKeyEvent....');
     if (!isEditable) return;
     const {type, charCode, keyCode, which, altKey, shiftKey} = evt;
 
@@ -2570,6 +2582,8 @@ function Ace2Inner(editorInfo, cssManagers) {
     let stopped = false;
 
     inCallStackIfNecessary('handleKeyEvent', function () {
+
+      window.console.log('handleKeyEvent');
       if (type === 'keypress' || (isTypeForSpecialKey && keyCode === 13 /* return*/)) {
         // in IE, special keys don't send keypress, the keydown does the action
         if (!outsideKeyPress(evt)) {
@@ -3207,12 +3221,14 @@ function Ace2Inner(editorInfo, cssManagers) {
   editorInfo.ace_getInInternationalComposition = () => inInternationalComposition;
 
   const bindTheEventHandlers = () => {
-    $(innerDocument).on('keydown', handleKeyEvent);
-    $(innerDocument).on('keypress', handleKeyEvent);
-    $(innerDocument).on('keyup', handleKeyEvent);
-    $(innerDocument).on('click', handleClick);
+    window.console.log('bindTheEventHandlers...');
+
+    $(innerDocument.body).on('keydown', handleKeyEvent);
+    $(innerDocument.body).on('keypress', handleKeyEvent);
+    $(innerDocument.body).on('keyup', handleKeyEvent);
+    $(innerDocument.body).on('click', handleClick);
     // dropdowns on edit bar need to be closed on clicks on both pad inner and pad outer
-    $(outerDoc).on('click', hideEditBarDropdowns);
+    $(outerDoc.body).on('click', hideEditBarDropdowns);
 
     // If non-nullish, pasting on a link should be suppressed.
     let suppressPasteOnLink = null;
@@ -3259,7 +3275,7 @@ function Ace2Inner(editorInfo, cssManagers) {
     // We reference document here, this is because if we don't this will expose a bug
     // in Google Chrome.  This bug will cause the last character on the last line to
     // not fire an event when dropped into..
-    $(innerDocument).on('drop', (e) => {
+    $(innerDocument.body).on('drop', (e) => {
       if (e.target.a || e.target.localName === 'a') {
         e.preventDefault();
       }
@@ -3338,14 +3354,19 @@ function Ace2Inner(editorInfo, cssManagers) {
 
   const getInnerHeight = () => {
     const h = browser.opera ? outerWin.innerHeight : outerDoc.documentElement.clientHeight;
+    window.console.log(`inner h = ${h}`);
     if (h) return h;
 
     // deal with case where iframe is hidden, hope that
     // style.height of iframe container is set in px
+    window.console.log(`inner h2 = ${Number(editorInfo.frame.parentNode.style.height.replace(/[^0-9]/g, '') || 0)}`);
     return Number(editorInfo.frame.parentNode.style.height.replace(/[^0-9]/g, '') || 0);
   };
 
-  const getInnerWidth = () => outerDoc.documentElement.clientWidth;
+  const getInnerWidth = () => {
+    window.console.log(`inner w = ${outerDoc.documentElement.clientWidth}`);
+    return outerDoc.documentElement.clientWidth;
+  };
 
   const scrollXHorizontallyIntoView = (pixelX) => {
     const distInsideLeft = pixelX - outerWin.scrollX;

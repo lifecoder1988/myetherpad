@@ -67,11 +67,28 @@ const ProxyDocument = (node) => {
       if(key == "body") {
         return node.firstChild;
       }
+      if(node[key] && node[key] instanceof Function) {
+        console.log("call node  " +  key)
+        return Reflect.get(node,key).bind(node);
+      }
+      if (node[key]) {
+        console.log(node)
+        console.log("call node  2 " +  key)
+        console.log(Reflect.get(node,key))
+        return Reflect.get(node,key);
+      }
       if(document[key] && document[key] instanceof Function) {
-        console.log("call document " +  key)
+        console.log("call document 1 " +  key)
         return Reflect.get(document,key).bind(document);
       }
+      console.log("call document 2 " +  key)
+      console.log(Reflect.get(document,key))
       return Reflect.get(document,key);
+    },
+    set(obj,key,value) {
+      console.log("call document set " + key + " = value " + value);
+      obj[key] = value;
+      return true;
     }
   })
 };
@@ -90,6 +107,7 @@ const ProxyIFrameWindow = (win, node) => {
           console.log("call obj " +  key)
           return Reflect.get(obj,key).bind(obj)
         }
+        console.log("call obj 2 " +  key)
         return obj[key]
       }
 
@@ -98,16 +116,19 @@ const ProxyIFrameWindow = (win, node) => {
           console.log("call iframenode " +  key)
           return Reflect.get(node,key).bind(node)
         }
+        console.log("call iframenode 2 " +  key)
         return node[key]
       }
       if (win[key] && win[key] instanceof Function) {
         console.log("call window " +  key)
         return Reflect.get(win,key).bind(win);
       }
+      console.log("call window 2 " +  key)
       return Reflect.get(win,key);
     },
     set(obj,key,value) {
-      console.log("set " + key + " = value " + value);
+      console.log("call set " + key + " = value " + value);
+      win[key] = value;
       obj[key] = value;
       return true;
     }
