@@ -131,7 +131,7 @@ exports.padeditbar = new class {
   }
 
   init() {
-    console.log("padeditbar init");
+    console.log('padeditbar init');
 
     $('#editbar .editbarbutton').attr('unselectable', 'on'); // for IE
     this.enable();

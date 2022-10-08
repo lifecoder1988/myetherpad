@@ -3186,9 +3186,9 @@ function Ace2Inner(editorInfo, cssManagers) {
           browserSelection.anchorOffset === range.endOffset,
     };
 
-    if (selection.startPoint.node.ownerDocument !== innerWindow.document) {
+    /* if (selection.startPoint.node.ownerDocument !== innerWindow.document) {
       return null;
-    }
+    } */
 
     return selection;
   };
