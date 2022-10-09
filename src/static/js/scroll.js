@@ -111,9 +111,9 @@ Scroll.prototype._isLinePartiallyVisibleOnViewport = function (lineNumber, rep) 
 
 Scroll.prototype._getViewPortTopBottom = function () {
   const theTop = this.getScrollY();
-  const doc = this.doc;
-  const height = doc.documentElement.clientHeight; // includes padding
-
+  // const doc = this.doc;
+  // const height = doc.documentElement.clientHeight; // includes padding
+  const height = this.outerWin.clientHeight;
   // we have to get the exactly height of the viewport.
   // So it has to subtract all the values which changes
   // the viewport height (E.g. padding, position top)
@@ -141,10 +141,10 @@ Scroll.prototype._getPaddingTopAddedWhenPageViewIsEnable = function () {
 Scroll.prototype._getScrollXY = function () {
   const win = this.outerWin;
   const odoc = this.doc;
-  if (typeof (win.pageYOffset) === 'number') {
+  if (typeof (win.scrollTop) === 'number') {
     return {
-      x: win.pageXOffset,
-      y: win.pageYOffset,
+      x: win.scrollLeft,
+      y: win.scrollTop,
     };
   }
   const docel = odoc.documentElement;
@@ -300,9 +300,10 @@ Scroll.prototype.scrollNodeVerticallyIntoView = function (rep, innerHeight) {
     } else if (caretIsBelowOfViewport) {
       // setTimeout is required here as line might not be fully rendered onto the pad
       setTimeout(() => {
-        const outer = this.outterWindow;
+        // const outer = this.outterWindow;
         // scroll to the very end of the pad outer
-        outer.scrollTo(0, outer[0].innerHeight);
+        // outer.scrollTo(0, outer[0].innerHeight);
+        this.outerWin.scrollTo(0, this.doc.documentElement.clientHeight);
       }, 150);
       // if the above setTimeout and functionality is removed then hitting an enter
       // key while on the last line wont be an optimal user experience

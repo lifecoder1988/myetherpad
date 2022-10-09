@@ -5,7 +5,7 @@
 // is represented by the browser
 exports.getPosition = () => {
   const range = getSelectionRange();
-  if (!range || $(range.endContainer).closest('body')[0].id !== 'innerdocbody') return null;
+  if (!range || $(range.endContainer).closest('[cname=body]')[0].id !== 'innerdocbody') return null;
   // When there's a <br> or any element that has no height, we can't get the dimension of the
   // element where the caret is. As we can't get the element height, we create a text node to get
   // the dimensions on the position.
@@ -51,9 +51,9 @@ const getPositionOfRepLineAtOffset = (node, offset) => {
 const getPositionOfElementOrSelection = (element) => {
   const rect = element.getBoundingClientRect();
   const linePosition = {
-    bottom: rect.bottom,
+    bottom: rect.bottom + window.$('[name=ace_outer]')[0].scrollTop,
     height: rect.height,
-    top: rect.top,
+    top: rect.top + window.$('[name=ace_outer]')[0].scrollTop,
   };
   return linePosition;
 };
