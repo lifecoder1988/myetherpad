@@ -3185,7 +3185,10 @@ function Ace2Inner(editorInfo, cssManagers) {
           browserSelection.anchorNode === range.endContainer &&
           browserSelection.anchorOffset === range.endOffset,
     };
-
+    window.console.log('1111111');
+    if (!innerWindow.document.body.contains(selection.startPoint.node)) {
+      return null;
+    }
     /* if (selection.startPoint.node.ownerDocument !== innerWindow.document) {
       return null;
     } */
@@ -3318,6 +3321,7 @@ function Ace2Inner(editorInfo, cssManagers) {
 
   const topLevel = (n) => {
     if ((!n) || n === innerDocument.body) return null;
+    window.console.log(n);
     while (n.parentNode !== innerDocument.body) {
       n = n.parentNode;
     }

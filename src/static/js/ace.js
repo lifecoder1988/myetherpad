@@ -184,6 +184,7 @@ const Ace2Editor = function () {
     outerFrame.name = 'ace_outer';
     outerFrame.frameBorder = 0; // for IE
     outerFrame.title = 'Ether';
+    outerFrame.style.overflow = 'scroll';
     // Some browsers do strange things unless the iframe has a src or srcdoc property:
     //   - Firefox replaces the frame's contentWindow.document object with a different object after
     //     the frame is created. This can be worked around by waiting for the window's load event
